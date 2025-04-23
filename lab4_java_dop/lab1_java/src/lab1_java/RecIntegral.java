@@ -1,0 +1,105 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package lab1_java;
+import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.IOException;
+
+/**
+ *
+ * @author Ant
+ */
+public class RecIntegral implements Externalizable{
+    private double a;  
+    private double b;  
+    private double h;  
+    private double result; 
+    
+    public RecIntegral() {
+    }
+    
+    // Constructor
+    public RecIntegral(double a, double b, double h) {
+        this.a = a;
+        this.b = b;
+        this.h = h;
+        this.result = 0.0;  
+    }
+
+    // Getters and Setters
+    public double getA() {
+        return a;
+    }
+
+    public void setA(double a) {
+        this.a = a;
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public void setB(double b) {
+        this.b = b;
+    }
+
+    public double getH() {
+        return h;
+    }
+
+    public void setH(double h) {
+        this.h = h;
+    }
+
+    public double getResult() {
+        return result;
+    }
+
+    public void setResult(double result) {
+        this.result = result;
+    }
+
+
+    public void calculate() {
+        long startTime = System.currentTimeMillis(); // Запоминаем время начала
+        double sum = 0.0;
+        double x = a;
+
+        while (x + h <= b) { 
+            sum += (h / 2.0) * (Math.cos(x) + Math.cos(x + h));
+            x += h;
+        }
+
+        if (x < b) {
+            double last_h = b - x;
+            sum += (last_h / 2.0) * (Math.cos(x) + Math.cos(b));
+        }
+
+        this.result = sum;  
+        long endTime = System.currentTimeMillis(); // Запоминаем время начала
+        long executionTime = endTime - startTime;  // Вычисляем разницу
+        System.out.println("Time: " + executionTime + " ms");
+    }
+    
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeDouble(a);
+        out.writeDouble(b);
+        out.writeDouble(h);
+        out.writeDouble(result);
+    }
+
+    // Реализация метода чтения данных
+    @Override
+    public void readExternal(ObjectInput in) throws IOException {
+        a = in.readDouble();
+        b = in.readDouble();
+        h = in.readDouble();
+        result = in.readDouble();
+    }
+}
+
